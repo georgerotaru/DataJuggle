@@ -35,7 +35,7 @@ public class WriteToExcel {
         for (int i=0; i<2;i++){
             Row row = sheet.createRow(i);
             // create cells
-            Cell cell = row.createCell(0);
+            //Cell cell = row.createCell(0);
             row.createCell(0).setCellValue(createHelper.createRichTextString("Name"));
             row.createCell(1).setCellValue(createHelper.createRichTextString("Description"));
             row.createCell(2).setCellValue(createHelper.createRichTextString("Start time"));
@@ -48,8 +48,7 @@ public class WriteToExcel {
             row.createCell(9).setCellValue(createHelper.createRichTextString("Link"));
             row.createCell(10).setCellValue(createHelper.createRichTextString("Created by"));
         }
-
-        FileOutputStream fileOut = new FileOutputStream("workbook.xls");
+        FileOutputStream fileOut = new FileOutputStream("findmefirst.xls");
         wb.write(fileOut);
         fileOut.close();
     }
