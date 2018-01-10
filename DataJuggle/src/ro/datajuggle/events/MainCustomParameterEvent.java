@@ -34,10 +34,11 @@ public class MainCustomParameterEvent {
 
     /**
      * @param args the command line arguments
+     * @throws java.io.FileNotFoundException
      */
     public static void main(String[] args) throws FileNotFoundException, IOException {
         
-        FacebookClient fbClient = new DefaultFacebookClient(new AccessToken().AccessToken(), Version.VERSION_2_11);
+        FacebookClient fbClient = new DefaultFacebookClient(new AccessToken().getAccessToken(), Version.VERSION_2_11);
         String id;
         String eventParameter;
         Scanner scanner = new Scanner(System.in);

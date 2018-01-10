@@ -14,8 +14,8 @@ import com.restfb.Version;
 public class AccessToken {
 String accessToken;
 
-    public String AccessToken() {
-        accessToken = "EAATyQwZCvEZB4BADZBIY1htuROcYAWpqiZBQEOx07CyQ9Bm6dxX0GLEaY0RAWBBrZAqCA6QzKWZAJmIQS4ZCLu8ZBtKhH0wghEUgjTUqaUmCJUCkM4x7xIalBaok5T4evXULYq2YggOZCpoDsA2LPdbsZB9UMTj35EZCXI4VyxDQdz0zdLuZCiY3P22mjAaILgIfQRAZD";
+    public String getAccessToken() {
+        accessToken = "EAACEdEose0cBAFFHhCvVAFc8ftZBC80Fr0QxXUqZCfFYbT4ALjphBpfSxbh0ZA9wEiRbLuI6JMZC5EcpBBE5zDo3RhYWoZBHMTdVEGS1nps5wAtGkZCmXiRMdhxV5tueLxHpJbnxsjhPuQWZAk3ZCNR5jPOkZCGU15ly3KDxed3OHibErHl5ttNLFj5AlchnRaPhOaZAYE2pHVeQZDZD";
         return accessToken;
     }
     
