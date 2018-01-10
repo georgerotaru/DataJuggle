@@ -32,52 +32,111 @@ public class EventsAbout {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Input event id: ");
         id = scanner.nextLine();
-        //SetDate setDate = new SetDate();
-        //setDate.inputDate();
-        //long unixDate = setDate.transformToUnixTimestamp();
+
         Event eventSearch = fbClient.fetchObject(id, Event.class);
-        Event eventSearch1 = fbClient.fetchObject(id, Event.class, Parameter.with("fields", "attending_count,interested_count"));
-        //Connection<Event> eventConnection = fbClient.fetchConnection("search", Event.class, Parameter.with(id, args));
+        Event eventSearchWithParam = fbClient.fetchObject(id, Event.class, Parameter.with("fields", "attending_count,interested_count"));
         
-        String eventId = eventSearch.getId();
-        System.out.println("id: "+eventId);
+        String eventId = null;
+        try {
+            eventId = eventSearch.getId();
+            System.out.println("id: "+eventId);
+        } catch (NullPointerException e) {
+            System.out.println("id: "+eventId);
+        }
+               
+        String eventName = null;
+        try {
+            eventName = eventSearch.getName();
+            System.out.println("name: "+eventName);
+        } catch (NullPointerException e) {
+            System.out.println("name: "+eventName);
+        }
         
-        String eventName = eventSearch.getName();
-        System.out.println("name: "+eventName);
+        String eventCity = null;
+        try {
+            eventCity = eventSearch.getPlace().getLocation().getCity();
+            System.out.println("city: "+eventCity);
+        } catch (NullPointerException e) {
+            System.out.println("city: "+eventCity);
+        }
         
-        String eventCity = eventSearch.getPlace().getLocation().getCity();
-        System.out.println("city: "+eventCity);
-        
-        String eventPlace = eventSearch.getPlace().getName();
-        System.out.println("place: "+eventPlace);
+        String eventPlace = null;
+        try {
+            eventPlace = eventSearch.getPlace().getName();
+            System.out.println("place: "+eventPlace);
+        } catch (NullPointerException e) {
+            System.out.println("place: "+eventPlace);
+        }
         
         DateFormat romanianDate = new SimpleDateFormat("dd.MM.yyyy"); 
         DateFormat shortTime = new SimpleDateFormat("HH:mm:ss");
         
-        Date eventStart = eventSearch.getStartTime();
-        System.out.println("start_date: "+romanianDate.format(eventStart));
-        System.out.println("start_time: "+shortTime.format(eventStart));
+        String eventStartDate = null;
+        String eventStartTime = null;
+        Date eventStart = null;
+        try {
+            eventStart = eventSearch.getStartTime();
+            eventStartDate = romanianDate.format(eventStart);
+            System.out.println("start_date: "+eventStartDate);
+            eventStartTime = shortTime.format(eventStart);
+            System.out.println("start_time: "+eventStartTime);
+        } catch (NullPointerException e) {
+            System.out.println("start_date: "+eventStartDate);
+            System.out.println("start_time: "+eventStartTime);
+        }
         
-        Date eventEnd = eventSearch.getEndTime();
-        System.out.println("end_date: "+romanianDate.format(eventEnd));
-        System.out.println("end_time: "+shortTime.format(eventEnd));
+        String eventEndDate = null;
+        String eventEndTime = null;
+        Date eventEnd = null;
+        try {
+            eventEnd = eventSearch.getEndTime();
+            eventEndDate = romanianDate.format(eventEnd);
+            System.out.println("end_date: "+eventEndDate);
+            eventEndTime = shortTime.format(eventEnd);
+            System.out.println("end_time: "+eventEndTime);
+        } catch (NullPointerException e) {
+            System.out.println("end_date: "+eventEndDate);
+            System.out.println("end_time: "+eventEndTime);
+        }
         
-        Integer eventAttending = eventSearch1.getAttendingCount();
-        System.out.println("attending: "+eventAttending);
+        Integer eventAttending = null;
+        try {
+            eventAttending = eventSearchWithParam.getAttendingCount();
+            System.out.println("attending: "+eventAttending);
+        } catch (NullPointerException e) {
+            System.out.println("attending: "+eventAttending);
+        }
         
-        Long eventInterested = eventSearch1.getInterestedCount();
-        System.out.println("interested: "+eventInterested);
+        Long eventInterested = null;
+        try {
+            eventInterested = eventSearchWithParam.getInterestedCount();
+            System.out.println("interested: "+eventInterested);
+        } catch (NullPointerException e) {
+            System.out.println("interested: "+eventInterested);
+        }
         
-        Double eventLatitude = eventSearch.getPlace().getLocation().getLatitude();
-        System.out.println("latitude: "+eventLatitude);
+        Double eventLatitude = null;
+        try {
+            eventLatitude = eventSearch.getPlace().getLocation().getLatitude();
+            System.out.println("latitude: "+eventLatitude);
+        } catch (NullPointerException e) {
+            System.out.println("latitude: "+eventLatitude);
+        }
         
-        Double eventLongitude = eventSearch.getPlace().getLocation().getLongitude();
-        System.out.println("longitude: "+eventLongitude);
+        Double eventLongitude = null;
+        try {
+            eventLongitude = eventSearch.getPlace().getLocation().getLongitude();
+            System.out.println("longitude: "+eventLongitude);
+        } catch (NullPointerException e) {
+            System.out.println("longitude: "+eventLongitude);
+        }
         
-        db.statement.execute("INSERT INTO APP.EVENTS_ABOUT VALUES ('"+eventId+"', '"+eventName+"', '"+eventCity+"',"
-                + "'"+eventPlace+"',"+eventAttending+", "+eventInterested+", "+eventLatitude+", "+eventLongitude+", "
-                + "'"+romanianDate.format(eventStart)+"', '"+shortTime.format(eventStart)+"', '"+romanianDate.format(eventEnd)+"',"
-                + "'"+shortTime.format(eventEnd)+"')");
+        String eventUrl = "https://www.facebook.com/events/"+id;
+        
+        db.statement.execute("INSERT INTO APP.EVENTS_ABOUT VALUES ('"+eventId+"', '"+eventName+"', '"+eventCity+"', "
+                + "'"+eventPlace+"', "+eventAttending+", "+eventInterested+", "+eventLatitude+", "+eventLongitude+", "
+                + "'"+eventStartDate+"', '"+eventStartTime+"', '"+eventEndDate+"', "
+                + "'"+eventEndTime+"', '"+eventUrl+"')");
     }
     
 }

@@ -30,11 +30,11 @@ public class DBConnect {
     public DBConnect() throws ClassNotFoundException, SQLException {
 
         try {
-                Class driverClass = Class.forName(driver);
-                connection = DriverManager.getConnection(host, username, passwd);
-                statement = connection.createStatement();
-                System.out.println("Connection to Java DB established!");
-                //statement.execute("INSERT INTO APP.EVENTS_ABOUT VALUES ('3','testName','testCity','testPlace',1,2,1.1,2.2,'19.01.2017','18:00')");
+            Class driverClass = Class.forName(driver);
+            connection = DriverManager.getConnection(host, username, passwd);
+            statement = connection.createStatement();
+            System.out.println("Connection to Java DB established!");
+            //statement.execute("INSERT INTO APP.EVENTS_ABOUT V    ALUES ('3','testName','testCity','testPlace',1,2,1.1,2.2,'19.01.2017','18:00')");
                 
         } catch (ClassNotFoundException ex) {
                 System.out.println("Can't connect to Java DB database");

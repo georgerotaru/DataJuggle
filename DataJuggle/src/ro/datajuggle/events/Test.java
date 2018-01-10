@@ -19,14 +19,14 @@ public class Test {
      * @throws java.lang.ClassNotFoundException
      * @throws java.sql.SQLException
      */
-    public static void main(String[] args) throws ClassNotFoundException, SQLException {
-        int i = 1;
+    public static void main(String[] args) throws SQLException, ClassNotFoundException {
+        DBConnect db = new DBConnect();
+        
+        /*int i = 1;
         while (i!=0) {
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("press any no. to continue or pres 0 to exit: ");
-            i = scanner.nextInt();
             EventsAbout events = new EventsAbout();
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("press any number key to continue or pres 0 to exit: ");
+            i = scanner.nextInt();    */        
         }
     }
-    
-}

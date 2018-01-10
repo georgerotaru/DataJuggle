@@ -15,7 +15,7 @@ public class AccessToken {
 String accessToken;
 
     public String getAccessToken() {
-        accessToken = "EAACEdEose0cBAFFHhCvVAFc8ftZBC80Fr0QxXUqZCfFYbT4ALjphBpfSxbh0ZA9wEiRbLuI6JMZC5EcpBBE5zDo3RhYWoZBHMTdVEGS1nps5wAtGkZCmXiRMdhxV5tueLxHpJbnxsjhPuQWZAk3ZCNR5jPOkZCGU15ly3KDxed3OHibErHl5ttNLFj5AlchnRaPhOaZAYE2pHVeQZDZD";
+        accessToken = "EAATyQwZCvEZB4BAOSoYWaQapIw0QrWD5m1t4kSzqo7C27J8n8ZCCDz7VB3ysDn9WFZAFwrRE63rnmsPiLjyQG16FJ5OLC2fg6PXQM5ZBocTInBtEv4Nx41MsIFXVuQRVCD84wy953Li7nrqefAvUjFuw13TYuXOaIZBy2reJg0ASqoDZB2p7mcgGxLVseS1YJwZD";
         return accessToken;
     }
     
