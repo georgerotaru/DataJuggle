@@ -12,7 +12,7 @@ import java.util.Scanner;
  *
  * @author admin
  */
-public class Test {
+public class GetEventsAbout {
 
     /**
      * @param args the command line arguments
@@ -20,13 +20,18 @@ public class Test {
      * @throws java.sql.SQLException
      */
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        DBConnect db = new DBConnect();
+        //DBConnect db = new DBConnect();
         
-        /*int i = 1;
-        while (i!=0) {
+        String userAnswer;
+        boolean inputAnother = true;
+        while (inputAnother) {
             EventsAbout events = new EventsAbout();
             Scanner scanner = new Scanner(System.in);
-            System.out.println("press any number key to continue or pres 0 to exit: ");
-            i = scanner.nextInt();    */        
+            System.out.println("Input another event? (yes/no): ");
+            userAnswer = scanner.nextLine();
+            if (userAnswer.equals("no")) {
+                inputAnother = false;
+            }
         }
     }
+}
