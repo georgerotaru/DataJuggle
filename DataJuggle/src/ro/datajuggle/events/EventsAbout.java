@@ -36,6 +36,8 @@ private String driver = "org.apache.derby.jdbc.ClientDriver";
 private Connection connection = null;
 private Statement statement = null;
 private ResultSet resultSet = null;
+private String eventId = null;
+private String eventName = null;
 
     public EventsAbout() throws SQLException, ClassNotFoundException, NullPointerException, SQLDataException {
         try {
@@ -45,23 +47,14 @@ private ResultSet resultSet = null;
             System.out.println("Connection to Java DB established!");
             DateToCalendar dtc = new DateToCalendar();
             FacebookClient fbClient = new DefaultFacebookClient(new AccessToken().getAccessToken(), Version.VERSION_2_11);
-            String id;
+            String eventId;
             Scanner scanner = new Scanner(System.in);
             System.out.println("Input event id: ");
-            id = scanner.nextLine();
+            eventId = scanner.nextLine();
 
-            Event eventSearch = fbClient.fetchObject(id, Event.class);
-            Event eventSearchWithParam = fbClient.fetchObject(id, Event.class, Parameter.with("fields", "attending_count,interested_count"));
+            Event eventSearch = fbClient.fetchObject(eventId, Event.class);
+            Event eventSearchWithParam = fbClient.fetchObject(eventId, Event.class, Parameter.with("fields", "attending_count,interested_count"));
             
-            String eventId = null;
-            try {
-                eventId = eventSearch.getId();
-                System.out.println("id: "+eventId);
-            } catch (NullPointerException e) {
-                System.out.println("id: "+eventId);
-            }
-
-            String eventName = null;
             try {
                 eventName = eventSearch.getName();
                 System.out.println("name: "+eventName);
@@ -119,7 +112,7 @@ private ResultSet resultSet = null;
                 System.out.println("end_date: "+eventEndDate);
                 System.out.println("end_time: "+eventEndTime);
             }
-            
+
             Integer eventAttending = null;
             try {
                 eventAttending = eventSearchWithParam.getAttendingCount();
@@ -152,13 +145,14 @@ private ResultSet resultSet = null;
                 System.out.println("longitude: "+eventLongitude);
             }
 
-            String eventUrl = "https://www.facebook.com/events/"+id;
-            
+            String eventUrl = "https://www.facebook.com/events/"+eventId;
+
             try {
                 statement.execute("INSERT INTO APP.EVENTS_ABOUT VALUES ('"+eventId+"', '"+eventName+"', '"+eventCity+"', "
                         + "'"+eventPlace+"', "+eventAttending+", "+eventInterested+", "+eventLatitude+", "+eventLongitude+", "
                         + "'"+eventStartDate+"', '"+eventStartTime+"', '"+eventEndDate+"', "
-                        + "'"+eventEndTime+"', '"+eventUrl+"')");                
+                        + "'"+eventEndTime+"', '"+eventUrl+"')");
+                
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }

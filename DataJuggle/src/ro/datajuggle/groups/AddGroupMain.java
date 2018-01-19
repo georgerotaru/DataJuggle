@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ro.datajuggle.events;
+package ro.datajuggle.groups;
 
 import java.sql.SQLException;
 import java.util.Scanner;
@@ -12,7 +12,7 @@ import java.util.Scanner;
  *
  * @author admin
  */
-public class GetEventsAbout {
+public class AddGroupMain {
 
     /**
      * @param args the command line arguments
@@ -25,14 +25,13 @@ public class GetEventsAbout {
         String userAnswer;
         boolean inputAnother = true;
         while (inputAnother) {
-            EventsAbout events = new EventsAbout();
+            AddGroup events = new AddGroup();
             Scanner scanner = new Scanner(System.in);
-            System.out.println("Input another event? (yes/no): ");
+            System.out.println("Input another group? (yes/no): ");
             userAnswer = scanner.nextLine();
             if (userAnswer.equals("no")) {
                 inputAnother = false;
             }
         }
-        //EventsAboutUpdate eau = new EventsAboutUpdate();
     }
 }

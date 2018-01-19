@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ro.datajuggle.events;
+package ro.datajuggle.groups;
 
 import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.Version;
-import com.restfb.types.Event;
+import com.restfb.types.Group;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -22,7 +22,7 @@ import ro.datajuggle.util.AccessToken;
  *
  * @author admin
  */
-public class EventAdminsAllInOne {
+public class GroupAdmins {
     
 private String username = "events";
 private String passwd = "events";
@@ -32,7 +32,7 @@ private Connection connection = null;
 private Statement statement = null;
 private ResultSet resultSet = null;
 
-    public EventAdminsAllInOne() throws SQLException {
+    public GroupAdmins() throws SQLException {
         FacebookClient fbClient = new DefaultFacebookClient(new AccessToken().getAccessToken(), Version.VERSION_2_11);
          try {
             Class driverClass = Class.forName(driver);
@@ -41,60 +41,51 @@ private ResultSet resultSet = null;
 
             System.out.println("Connection to Java DB established!");
              
-            statement = connection.createStatement();
-            System.out.println("statement created");
-            resultSet = statement.executeQuery("SELECT ID FROM APP.EVENTS_ABOUT");
-            System.out.println("result set created");
+            statement = connection.createStatement();           
+            resultSet = statement.executeQuery("SELECT ID FROM APP.GROUPS");
             
-            List eventsList = new LinkedList();
+            List groupList = new LinkedList();
             while (resultSet.next()) {
                 String item = resultSet.getString(1);
-                eventsList.add(item);
+                groupList.add(item);
             }
-            System.out.println("linked list created");
 
             String currentId = null;
-            String tableName = null;
             String searchCriteria = null;
             String adminId = null;
             String adminName = null;
             String userUrl = null;
-            
-            tableName = "ADMINS_ALL";
-            statement.execute("create table "+ tableName + " (id integer primary key, admin_id varchar(25), name varchar(100), user_url varchar(100), event_id varchar(20))");
-            System.out.println("executed create table "+tableName);
-                
-            for (int c=0; c<eventsList.size(); c++) {
-                currentId = eventsList.get(c).toString();
-                System.out.println("current event ID: "+currentId);
 
+
+            for (int c=0; c<groupList.size(); c++) {
+                int counter = 0;
+                currentId = groupList.get(c).toString();
                 searchCriteria = currentId+"/admins";
-                System.out.println("search criteria "+searchCriteria);
 
-                com.restfb.Connection<Event> eventAdmins = fbClient.fetchConnection(searchCriteria, Event.class);
-                System.out.println("connected to event "+searchCriteria);
+                com.restfb.Connection<Group> groupAdmins = fbClient.fetchConnection(searchCriteria, Group.class);
+                System.out.println("connected to "+searchCriteria);
 
-                for (int i=0; i<eventAdmins.getData().size(); i++) {
+                for (int i=0; i<groupAdmins.getData().size(); i++) {
                     try {
-                        adminId = eventAdmins.getData().get(i).getId();
-                        System.out.println("admin ID: "+adminId);
+                        adminId = groupAdmins.getData().get(i).getId();
                         userUrl = "https://www.facebook.com/"+adminId;
-                        adminName = eventAdmins.getData().get(i).getName().replaceAll("'", "");
-                        System.out.println("admin name: "+adminName);
-                        statement.execute("INSERT INTO "+tableName+" values ("+i+", '"+adminId+"', '"+adminName+"', '"+userUrl+"', '"+currentId+"')");
+                        adminName = groupAdmins.getData().get(i).getName().replaceAll("'", "");
+                        statement.execute("INSERT INTO APP.GROUPS_ADMIN (USER_ID, USER_NAME, USER_URL, GROUP_ID) values ('"+adminId+"', '"+adminName+"', '"+userUrl+"', '"+currentId+"')");
                         connection.commit();
+                        counter++;
                     } catch (NullPointerException e) {
                         System.out.println("admin ID: "+adminId);
                         System.out.println("admin name: "+adminName);
                         e.printStackTrace();
                     }
-                }                        
+                }
+                System.out.println("    The event "+currentId+" has "+counter+" admins.");
             }
 
             connection.setAutoCommit(true);
          } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
-            throw new SQLException();
+            //throw new SQLException();
         } finally {
             if (resultSet != null) {
                 try {

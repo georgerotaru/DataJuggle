@@ -1,7 +1,7 @@
 /*
  * Connect to events database
  */
-package ro.datajuggle.events;
+package ro.datajuggle.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

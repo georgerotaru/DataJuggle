@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ro.datajuggle.events;
+package ro.datajuggle.groups;
 
 import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.Version;
-import com.restfb.types.Event;
+import com.restfb.types.Group;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -22,7 +22,7 @@ import ro.datajuggle.util.AccessToken;
  *
  * @author admin
  */
-public class UsersAttendingEvent {
+public class GroupMembers {
     
 private String username = "events";
 private String passwd = "events";
@@ -30,16 +30,15 @@ private String host = "jdbc:derby://localhost:1527/events;create=true";
 private String driver = "org.apache.derby.jdbc.ClientDriver";
 private Connection connection = null;
 private Statement statement = null;
-private ResultSet resultSet = null;   
+private ResultSet resultSet = null;    
 
 private String currentId;
-private String tableName = null;
 private String searchCriteria = null;
 private String userId = null;
 private String userName = null;   
 private String userUrl = null;
-
-    public UsersAttendingEvent() throws SQLException, ClassNotFoundException {
+            
+    public GroupMembers() throws SQLException, ClassNotFoundException {
         FacebookClient fbClient = new DefaultFacebookClient(new AccessToken().getAccessToken(), Version.VERSION_2_11);
         
         try {
@@ -50,37 +49,39 @@ private String userUrl = null;
             System.out.println("Connection to Java DB established!");
 
             statement = connection.createStatement();           
-            resultSet = statement.executeQuery("SELECT ID FROM APP.EVENTS_ABOUT");
+            resultSet = statement.executeQuery("SELECT ID FROM APP.GROUPS");
 
-            List eventsList = new LinkedList();
+            List groupList = new LinkedList();
             while (resultSet.next()) {
                 String item = resultSet.getString(1);
-                eventsList.add(item);
+                groupList.add(item);
             }
             
-            for (int c=0; c<eventsList.size(); c++) {
-                int counter = 0;
-                currentId = eventsList.get(c).toString();
-                searchCriteria = currentId+"/attending";
-                
-                com.restfb.Connection<Event> eventAttending = fbClient.fetchConnection(searchCriteria, Event.class);
-                System.out.println("    Connected to event "+currentId);
 
-                if (eventAttending.getData().size()!=0) {
-                    for (List<Event> attendingPage : eventAttending) {
-                        for (Event attending : attendingPage) {
-                            userId = attending.getId();
+
+            for (int c=0; c<groupList.size(); c++) {
+                int counter = 0;
+                currentId = groupList.get(c).toString();
+                searchCriteria = currentId+"/members";
+
+                com.restfb.Connection<Group> groupMembers = fbClient.fetchConnection(searchCriteria, Group.class);
+                System.out.println("    connected to group "+currentId);
+
+                if (groupMembers.getData().size()!=0) {
+                    for (List<Group> membersPage : groupMembers) {
+                        for (Group member : membersPage) {
+                            userId = member.getId();
                             userUrl = "https://www.facebook.com/"+userId;
-                            userName = attending.getName().replaceAll("'", "");
-                            statement.execute("INSERT INTO APP.EVENTS_ATTENDING (USER_ID, USER_NAME, USER_URL, EVENT_ID) values ('"+userId+"', '"+userName+"', '"+userUrl+"', '"+currentId+"')");
+                            userName = member.getName().replaceAll("'", "");
+                            statement.execute("INSERT INTO APP.GROUP_MEMBERS (USER_ID, USER_NAME, USER_URL, GROUP_ID) values ('"+userId+"', '"+userName+"', '"+userUrl+"', '"+currentId+"')");
                             connection.commit();
                             counter++;
                         }
                       }
                 } else {
-                    System.out.println("Nobody is attending the event "+ currentId);
+                    System.out.println("No members for "+ currentId);
                 }
-                System.out.println("        Added "+counter+" attendings for "+currentId);
+                System.out.println("        Group "+currentId+" has "+counter+" members.");
             }
                 
         } catch (ClassNotFoundException | SQLException e) {

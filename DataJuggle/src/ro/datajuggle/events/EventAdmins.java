@@ -57,37 +57,34 @@ private ResultSet resultSet = null;
             String adminName = null;
             String userUrl = null;
 
+
             for (int c=0; c<eventsList.size(); c++) {
+                int counter = 0;
                 currentId = eventsList.get(c).toString();
-                System.out.println("current event ID: "+currentId);
-                tableName = "ADMINS_"+currentId;
-                System.out.println("table name: "+tableName);
+                //System.out.println("current event ID: "+currentId);
                 searchCriteria = currentId+"/admins";
-                System.out.println("search criteria "+searchCriteria);
+                //System.out.println("search criteria "+searchCriteria);
 
                 com.restfb.Connection<Event> eventAdmins = fbClient.fetchConnection(searchCriteria, Event.class);
                 System.out.println("connected to event "+searchCriteria);
-                
-
-                statement.execute("create table "+ tableName + " (admin_id varchar(25) primary key, name varchar(100), user_url varchar(100), event_id varchar(20))");
-                System.out.println("executed create table "+tableName);
-
 
                 for (int i=0; i<eventAdmins.getData().size(); i++) {
                     try {
                         adminId = eventAdmins.getData().get(i).getId();
-                        System.out.println("admin ID: "+adminId);
+                        //System.out.println("admin ID: "+adminId);
                         userUrl = "https://www.facebook.com/"+adminId;
-                        adminName = eventAdmins.getData().get(i).getName().replaceAll("'", "");
-                        System.out.println("admin name: "+adminName);
-                        statement.execute("INSERT INTO "+tableName+" values ('"+adminId+"', '"+adminName+"', '"+userUrl+"', '"+currentId+"')");
+                        adminName = eventAdmins.getData().get(i).getName().replaceAll("'", "\\'");
+                        //System.out.println("admin name: "+adminName);
+                        statement.execute("INSERT INTO APP.EVENTS_ADMIN (USER_ID, USER_NAME, USER_URL, EVENT_ID) values ('"+adminId+"', '"+adminName+"', '"+userUrl+"', '"+currentId+"')");
                         connection.commit();
+                        counter++;
                     } catch (NullPointerException e) {
                         System.out.println("admin ID: "+adminId);
                         System.out.println("admin name: "+adminName);
                         e.printStackTrace();
                     }
-                }                        
+                }
+                System.out.println("The event "+currentId+" has "+counter+" admins.");
             }
 
             connection.setAutoCommit(true);

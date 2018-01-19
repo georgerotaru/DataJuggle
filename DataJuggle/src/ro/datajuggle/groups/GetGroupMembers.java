@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ro.datajuggle.events;
+package ro.datajuggle.groups;
 
 import java.sql.SQLException;
 
@@ -11,14 +11,15 @@ import java.sql.SQLException;
  *
  * @author admin
  */
-public class GetEventAdmins {
+public class GetGroupMembers {
 
     /**
      * @param args the command line arguments
      * @throws java.sql.SQLException
+     * @throws java.lang.ClassNotFoundException
      */
-    public static void main(String[] args) throws SQLException {
-        EventAdmins ea = new EventAdmins();
+    public static void main(String[] args) throws SQLException, ClassNotFoundException {
+        GroupMembers gm = new GroupMembers();
     }
     
 }
